@@ -1,0 +1,1 @@
+<?php $self->hide();

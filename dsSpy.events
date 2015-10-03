@@ -1,0 +1,4 @@
+a:1:{s:5:"index";a:4:{s:8:"tmctimer";a:1:{s:7:"ontimer";s:18:"dsSpy::TMCTimer();";}s:8:"--fmedit";a:3:{s:8:"oncreate";s:65:"dsSpy::init();
+$self->doubleBuffered=true;
+$self->invalidate();";s:7:"onpaint";s:14:"$self->hide();";s:12:"onclosequery";s:39:"dsSpy::CloseProgram();
+$canClose=true;";}s:9:"startscan";a:1:{s:7:"ontimer";s:19:"dsSpy::startScan();";}s:8:"trayicon";a:3:{s:11:"onmousemove";s:48:"dsSpy::TrayIcon_onMousemove($self,$shift,$x,$y);";s:11:"onmousedown";s:56:"dsSpy::TrayIcon_onMouseDown($self,$button,$shift,$x,$y);";s:9:"onmouseup";s:54:"dsSpy::TrayIcon_onMouseUp($self,$button,$shift,$x,$y);";}}}
