@@ -91,7 +91,7 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 				'ReleaseDC'=>true,	// [int]
 				'GetDoubleClickTime'=>false,	// ffi	// in milliseconds
 			);
-	function  1($n){
+	public static function  1($n){
 		if(self::$ffi===false) self:: initFFI();
 		if(self::$Lib===false){ self::$Lib=wb_load_library(self::LibName); if(self::$Lib===false) return false; }
 		if(!isset(self::$Fns[$n]) || self::$Fns[$n]===true){
@@ -103,7 +103,7 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 		}
 		return self::$Fns[$n];
 	}
-	function  initFFI(){
+	public static function  initFFI(){
 		self::$ffi=new ffi (
 			"[lib='user32.dll']
 				int MessageBoxA( 
@@ -117,13 +117,13 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 				uint32 GetDoubleClickTime( );
 			" );
 	}
-	function SetCursorPos($x=0,$y=0){
+	public static function SetCursorPos($x=0,$y=0){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$r=wb_call_function($Fn,array($x,$y));
 		return (bool)$r;
 	}
-	function GetCursorPos(&$x,&$y){
+	public static function GetCursorPos(&$x,&$y){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$xy=pack('ll',0,0);
@@ -133,7 +133,7 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 		$y=$xy['b'];
 		return (bool)$r;
 	}
-	function AnimateWindow($hwnd,$dwTime=200,$dwFlags=0x00000010){
+	public static function AnimateWindow($hwnd,$dwTime=200,$dwFlags=0x00000010){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=(int)$hwnd;
@@ -142,7 +142,7 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 		$r=wb_call_function($Fn,array($hwnd,$dwTime,$dwFlags));
 		return (bool)$r;
 	}
-	function ShowWindow($hwnd,$nCmdShow=0){
+	public static function ShowWindow($hwnd,$nCmdShow=0){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=(int)$hwnd;
@@ -150,42 +150,42 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 		$r=wb_call_function($Fn,array($hwnd,$nCmdShow));
 		return (bool)$r;
 	}
-	function CloseWindow($hwnd){
+	public static function CloseWindow($hwnd){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=(int)$hwnd;
 		$r=wb_call_function($Fn,array($hwnd));
 		return (bool)$r;
 	}
-	function BringWindowToTop($hwnd){
+	public static function BringWindowToTop($hwnd){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=(int)$hwnd;
 		$r=wb_call_function($Fn,array($hwnd));
 		return (bool)$r;
 	}
-	function DestroyWindow($hwnd){
+	public static function DestroyWindow($hwnd){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=(int)$hwnd;
 		$r=wb_call_function($Fn,array($hwnd));
 		return (bool)$r;
 	}
-	function GetShellWindow(){
+	public static function GetShellWindow(){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		return wb_call_function($Fn);
 	}
-	function GetDesktopWindow(){
+	public static function GetDesktopWindow(){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		return wb_call_function($Fn);
 	}
-	function GetForegroundWindow(){
+	public static function GetForegroundWindow(){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		if(true===$Fn) return self::$ffi->{__FUNCTION__}();
 		
 		return wb_call_function($Fn);
 	}
-	function MoveWindow($hwnd,$x,$y,$nWidth,$nHeight,$bRepaint=true){
+	public static function MoveWindow($hwnd,$x,$y,$nWidth,$nHeight,$bRepaint=true){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=(int)$hwnd;
@@ -197,14 +197,14 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 		$r=wb_call_function($Fn,array($hwnd,$x,$y,$nWidth,$nHeight,$bRepaint));
 		return (bool)$r;
 	}
-	function WindowFromPoint($x,$y){
+	public static function WindowFromPoint($x,$y){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$x=(int)$x;
 		$y=(int)$y;
 		return wb_call_function($Fn,array($x,$y));
 	}
-	function ChildWindowFromPoint($hwnd,$x,$y){
+	public static function ChildWindowFromPoint($hwnd,$x,$y){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=(int)$hwnd;
@@ -212,7 +212,7 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 		$y=(int)$y;
 		return wb_call_function($Fn,array($hwnd,$x,$y));
 	}
-	function ChildWindowFromPointEx($hwnd,$x,$y,$uFlags=0){
+	public static function ChildWindowFromPointEx($hwnd,$x,$y,$uFlags=0){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=(int)$hwnd;
@@ -221,52 +221,52 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 		$uFlags=(int)$uFlags;
 		return wb_call_function($Fn,array($hwnd,$x,$y,$uFlags));
 	}
-	function GetTopWindow($hWnd=null){
+	public static function GetTopWindow($hWnd=null){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=is_null($hwnd) ? null : (int)$hwnd;
 		return wb_call_function($Fn, array($hWnd));
 	}
-	function GetParent($hWnd){
+	public static function GetParent($hWnd){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=(int)$hwnd;
 		return wb_call_function($Fn, array($hWnd));
 	}
-	function SetParent($hWndChild,$hWndNewParent=null){
+	public static function SetParent($hWndChild,$hWndNewParent=null){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hWndChild=(int)$hWndChild;
 		$hWndNewParent=is_null($hWndNewParent) ? null : (int)$hWndNewParent;
 		return wb_call_function($Fn, array($hWndChild,$hWndNewParent));
 	}
-	function GetWindow($hWnd,$uCmd=0){
+	public static function GetWindow($hWnd,$uCmd=0){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hWnd=(int)$hWnd;
 		$uCmd=(int)$uCmd;
 		return wb_call_function($Fn, array($hWnd,$uCmd));
 	}
-	function SetForegroundWindow($hWnd){
+	public static function SetForegroundWindow($hWnd){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=(int)$hwnd;
 		return wb_call_function($Fn, array($hWnd));
 	}
-	function ArrangeIconicWindows($hWnd){
+	public static function ArrangeIconicWindows($hWnd){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hwnd=(int)$hwnd;
 		$r=wb_call_function($Fn, array($hWnd));
 		return (bool)$r;
 	}
-	function BeginDeferWindowPos($nNumWindows){
+	public static function BeginDeferWindowPos($nNumWindows){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$nNumWindows=(int)$nNumWindows;
 		return wb_call_function($Fn, array($nNumWindows));
 	}
-	function DeferWindowPos($hWinPosInfo,$hWnd,$hWndInsertAfter,$x,$y,$cx,$cy,$uFlags=0x0040){
+	public static function DeferWindowPos($hWinPosInfo,$hWnd,$hWndInsertAfter,$x,$y,$cx,$cy,$uFlags=0x0040){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hWinPosInfo=(int)$hWinPosInfo;			//HDWP 
@@ -279,14 +279,14 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 		$uFlags=(int)$uFlags;
 		return wb_call_function($Fn, array($hWinPosInfo,$hWnd,$hWndInsertAfter,$x,$y,$cx,$cy,$uFlags));
 	}
-	function EndDeferWindowPos($hWinPosInfo){
+	public static function EndDeferWindowPos($hWinPosInfo){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hWinPosInfo=(int)$hWinPosInfo;	//HDWP
 		$r=wb_call_function($Fn, array($nNumWindows));
 		return (bool)$r;
 	}
-	function AnyPopup(){
+	public static function AnyPopup(){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		if(true===$Fn) return self::$ffi->{__FUNCTION__}();
 		
@@ -294,7 +294,7 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 		return (bool)$r;
 	}
 	
-	function GetSystemMetrics($nIndex=0){
+	public static function GetSystemMetrics($nIndex=0){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$nIndex=(int)$nIndex;
@@ -302,13 +302,13 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 	}
 	
 	/// Device Contexts
-	function GetDC($hWnd=null){
+	public static function GetDC($hWnd=null){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hWnd=is_null($hWnd) ? null : (int)$hWnd;
 		return wb_call_function($Fn,array($hWnd));
 	}
-	function ReleaseDC($hWnd,$hDC){
+	public static function ReleaseDC($hWnd,$hDC){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		
 		$hWnd=(int)$hWnd;	// HWND 
@@ -317,7 +317,7 @@ class WinAPI_USER {	//© roxblnfk 2012 ;)
 	}
 	
 	
-	function GetDoubleClickTime(){
+	public static function GetDoubleClickTime(){
 		$Fn=self:: 1(__FUNCTION__); if(false===$Fn) return false;
 		if(true===$Fn) return self::$ffi->{__FUNCTION__}();
 	}
