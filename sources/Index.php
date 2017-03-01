@@ -7,7 +7,7 @@ class dsSpy{
 	static $wb_windows=array();
 	static $wb_controls=array();
 	static $LastEventTime=0;
-	static $Host='community.develstudio.ru';
+	static $Host='community.develstudio.org';
 	static $LastPost=array(/*
 		array of ThemeID=>array(
 			0=>null,	// id пользователя
@@ -392,7 +392,7 @@ class dsSpy{
 					};
 				$DownItems[]=$i;
 				
-				self::$wb_controls[$wid][++$i]=self::ds_createLabel(self::$wb_windows[$wid],$x+20,$H-$h,$w-40,$h,'dsSpy © roxblnfk 2012',taCenter,fsBold,10,self::skin('TextColor'));
+				self::$wb_controls[$wid][++$i]=self::ds_createLabel(self::$wb_windows[$wid],$x+20,$H-$h,$w-40,$h,'dsSpy © roxblnfk 2012-2017',taCenter,fsBold,10,self::skin('TextColor'));
 				self::$wb_controls[$wid][$i]->transparent=false;
 				self::$wb_controls[$wid][$i]->cursor=crHelp;
 				self::$wb_controls[$wid][$i]->layout=tlCenter;
@@ -652,7 +652,7 @@ class dsSpy{
 				self::switchPause();
 			break;
 		}
-		if(self::$MouseEvents[1]>20) alert(self::encoding_toGUI("Жжошь, сцуко!\r\nЕсли щёлкнуть дважды на надписи \"dsSpy © roxblnfk 2012\", то изменится скин программы ;)"));
+		if(self::$MouseEvents[1]>20) alert(self::encoding_toGUI("Жжошь, сцуко!\r\nЕсли щёлкнуть дважды на надписи \"dsSpy © roxblnfk 2012-2017\", то изменится скин программы ;)"));
 	}
 	function TrayIcon_onMouseDown(&$self,$button,$shift,$x,$y){
 		self::$wb_controls[IndexWindow][IndexTrayIcon]->iconFile=realpath(self::$TrayIcon);
@@ -717,17 +717,17 @@ class dsSpy{
 		$menu->picture->loadFromFile(DOC_ROOT.'/files/images/community_fav.ico','ico');
 		$popup->addItem($menu);
 		
-		$menu=new TMenuItem;
-		$menu->caption=self::encoding_toGUI('Открыть develnet.ru');
-		$menu->onClick=function(){ dsSpy::RunURL('http://develnet.ru'); };
-		$menu->picture->transparent=false;
-		$menu->picture->loadFromFile(DOC_ROOT.'/files/images/develnet_fav.ico','ico');
-		$popup->addItem($menu);
+		// $menu=new TMenuItem;
+		// $menu->caption=self::encoding_toGUI('Открыть develnet.ru');
+		// $menu->onClick=function(){ dsSpy::RunURL('http://develnet.ru'); };
+		// $menu->picture->transparent=false;
+		// $menu->picture->loadFromFile(DOC_ROOT.'/files/images/develnet_fav.ico','ico');
+		// $popup->addItem($menu);
 		
-		$menu=new TMenuItem;
-		$menu->caption=self::encoding_toGUI('Открыть DS Wiki (ds-wiki.ru)');
-		$menu->onClick=function(){ dsSpy::RunURL('http://ds-wiki.ru'); };
-		$popup->addItem($menu);
+		// $menu=new TMenuItem;
+		// $menu->caption=self::encoding_toGUI('Открыть DS Wiki (ds-wiki.ru)');
+		// $menu->onClick=function(){ dsSpy::RunURL('http://ds-wiki.ru'); };
+		// $popup->addItem($menu);
 		
 		$menu=new TMenuItem;
 		$menu->caption=self::encoding_toGUI('Перейти на страницу DS в VK');
