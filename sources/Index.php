@@ -655,10 +655,10 @@ class dsSpy {
                     $up = $dy < 0;
                     $sens = 4;
                     if (abs($dy) > $sens) {
-                        $cnt = abs($dy) % $sens;
+                        $cnt = floor(abs($dy) / $sens);
                         for ($i = 0; $i < $cnt; ++$i)
                             $parent->perform(277, (int)!$up, 0);
-                        $fn_scrollState[2] = $yy1 + ($up ? -1 : 1) * $sens * $cnt;
+                        $fn_scrollState[2] = $yy1 - $dy % $sens;
                     }
                 };
                 $parent->onMouseDown = $fn_scrollMouseDown;
@@ -1030,7 +1030,6 @@ class dsSpy {
     function setAutoRun($ja) {
         // HKCU\Software\Microsoft\Windows\CurrentVersion\Run
         $p = '"' . realpath(EXE_NAME) . '"';
-        //pre($p);
         writeRegKey(
             HKEY_CURRENT_USER,
             'Software\\Microsoft\\Windows\\CurrentVersion\\Run\\dsSpy',
