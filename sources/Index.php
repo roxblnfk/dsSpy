@@ -638,6 +638,33 @@ class dsSpy {
                 $parent =& self::$wb_controls[$wid][0];
                 $ww = $W - 16;
                 $y = -10;
+
+                # функции скролла окна
+                $fn_scrollState = array();
+                $fn_scrollMouseDown = function ($id, $button, $shift, $x, $y) use (&$parent, &$fn_scrollState) {
+                    WinAPI_USER::GetCursorPos($xx, $yy);
+                    $fn_scrollState = array(true, $xx, $yy);
+                };
+                $fn_scrollMouseUp = function ($id, $button, $shift, $x, $y) use (&$parent, &$fn_scrollState) { $fn_scrollState[0] = false; };
+                $fn_scrollMouseMove = function ($id, $shift, $x, $y) use (&$parent, &$fn_scrollState) {    // перемещение
+                    if (!$fn_scrollState || true !== $fn_scrollState[0]) return;
+                    WinAPI_USER::GetCursorPos($xx1, $yy1);
+                    // $xx0 = $fn_scrollState[1];
+                    $yy0 = $fn_scrollState[2];
+                    $dy = $yy0 - $yy1;
+                    $up = $dy < 0;
+                    $sens = 4;
+                    if (abs($dy) > $sens) {
+                        $cnt = abs($dy) % $sens;
+                        for ($i = 0; $i < $cnt; ++$i)
+                            $parent->perform(277, (int)!$up, 0);
+                        $fn_scrollState[2] = $yy1 + ($up ? -1 : 1) * $sens * $cnt;
+                    }
+                };
+                $parent->onMouseDown = $fn_scrollMouseDown;
+                $parent->onMouseUp = $fn_scrollMouseUp;
+                $parent->onMouseMove = $fn_scrollMouseMove;
+
                 for ($i0 = 0, $j0 = sizeof($TextBlocks); $i0 < $j0; ++$i0) {
                     $Text =& $TextBlocks[$i0];
                     /////////////
@@ -703,6 +730,9 @@ class dsSpy {
                         else unset(self::$Avatars[$Text['authorid']]);
                     elseif (self::$Avatars[$Text['authorid']] === true)
                         self::$WaitingAvatars[$Text['authorid']][] = $i;
+                    self::$wb_controls[$wid][$i]->onMouseDown = $fn_scrollMouseDown;
+                    self::$wb_controls[$wid][$i]->onMouseUp = $fn_scrollMouseUp;
+                    self::$wb_controls[$wid][$i]->onMouseMove = $fn_scrollMouseMove;
                     ////////////////
                     $x += $w + $b;
                     $w = $ww - $x - $b - $b;
