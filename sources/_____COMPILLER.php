@@ -13,7 +13,7 @@ $inc='';
 foreach($A as $v){
 	$name=substr(md5($v),8,-8).'.phb';
 	echo "* compile   $v   to   $name\n";
-	Compile('./'.$v, '../files/scripts/'.$name);
+	compile('./'.$v, '../files/scripts/'.$name);
 	$inc.="\r\n	require_once(getfilename(DOC_ROOT.'/files/scripts/{$name}'));";
 }
 function compile($in, $out){
