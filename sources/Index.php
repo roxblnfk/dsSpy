@@ -109,21 +109,24 @@ class dsSpy {
                 'alphaBlend'      => 255,
             );
         $dr = realpath(DOC_ROOT);
+        chdir(DOC_ROOT);
         for ($ks = array_keys(self::$Avatars), $j = sizeof($ks), $i = 0; $i < $j; ++$i) {
             $k = $ks[$i];
-            if (!is_string(self::$Avatars[$k])) unset(self::$Avatars[$k]);
-            if (!is_file(self::$Avatars[$k])) unset(self::$Avatars[$k]);
+            if (!is_string(self::$Avatars[$k]) || !is_file(self::$Avatars[$k])) {
+                unset(self::$Avatars[$k]);
+                continue;
+            }
 
             $p = realpath(self::$Avatars[$k]);
             if (0 === strpos($p, $dr)) {
                 self::$Avatars[$k] = '.' . substr($p, strlen($dr));
             }
         }
-        $avaDir = DOC_ROOT . '/files/temp';
+        $avaDir = DOC_ROOT . '\\files\\temp';
         if (!is_dir($avaDir)) mkdir($avaDir);
         # поиск аватарок в папке аватарок
         $files = scandir($avaDir);
-        $avaDir .= '/';
+        $avaDir .= '\\';
         for ($i = 0, $j = sizeof($files); $i < $j; ++$i) {
             $fl = $files[$i];
             if (!is_file($avaDir . $fl)) continue;
@@ -397,6 +400,7 @@ class dsSpy {
         //WinAPI_USER::CloseWindow(wb_get_id(self::$wb_windows[$wid]));
     }
     function gotWindow($wid = null, $Timer = 0, $Title = 'Привет! :)', $Type = 0, $TextBlocks = array(), $X = null, $Y = null, $Wdth = 360, $Hgnt = 500) {//© roxblnfk ;)
+        chdir(DOC_ROOT);
         if (!isset($wid)) $wid = FloatWindow;    // window id
         $Wa = explode(' ', wb_get_system_info('workarea'));
         $W = intval(min(max(40, $Wdth), $Wa[2]));
@@ -574,7 +578,7 @@ class dsSpy {
                     $h
                 );
                 self::$wb_controls[$wid][$i]->loadFromFile(self::skin('WinImageRD'));
-                self::$wb_controls[$wid][$i]->hint = self::encoding_toGUI('Прилепить в парвый шижний угол');
+                self::$wb_controls[$wid][$i]->hint = self::encoding_toGUI('Прилепить в парвый нижний угол');
                 self::$wb_controls[$wid][$i]->cursor = crHandPoint;
                 self::$wb_controls[$wid][$i]->onClick = function ($id) use (&$wid, &$OnResize) {
                     $Wa = explode(' ', wb_get_system_info('workarea'));
@@ -668,18 +672,19 @@ class dsSpy {
                 for ($i0 = 0, $j0 = sizeof($TextBlocks); $i0 < $j0; ++$i0) {
                     $Text =& $TextBlocks[$i0];
                     /////////////
+                    $AuthorID = $Text['authorid'];
                     $w = $ww;
                     $x = 0;
                     // picture
                     self::$wb_controls[$wid][++$i] = self::ds_createImage($parent, $x += $b, $y += $h, $w = 100, 100);
                     self::$wb_controls[$wid][$i]->hint = self::encoding_toGUI('Аватарка пользователя');
                     // кач картинки
-                    if (!isset(self::$Avatars[$Text['authorid']]) && self::$Options['downloadImages']) {
-                        self::$Avatars[$Text['authorid']] = true;
-                        if (!isset(self::$WaitingAvatars[$Text['authorid']])) self::$WaitingAvatars[$Text['authorid']] = array($i);
+                    if (!isset(self::$Avatars[$AuthorID]) && self::$Options['downloadImages']) {
+                        self::$Avatars[$AuthorID] = true;
+                        if (!isset(self::$WaitingAvatars[$AuthorID])) self::$WaitingAvatars[$AuthorID] = array($i);
 
                         $ip = gethostbyname(self::$Host);
-                        $url = 'http://' . $ip . '/image.php?u=' . $Text['authorid'] . '&dateline=1341764643';
+                        $url = 'http://' . $ip . '/image.php?u=' . urlencode($AuthorID) . '&dateline=1341764643';
                         $addheads = array('Host: ' . self::$Host);
                         $EndFunc = function ($ch, $wid, $LastEventTime, $AuthorID) {
                             $img = TMC::GetContent($ch);
@@ -695,11 +700,10 @@ class dsSpy {
                                 return false;
                             }
                             //wb_play_sound(WBC_INFO);
-                            $file = DOC_ROOT . '/files/temp/Ava_' . $AuthorID . '.png';
+                            chdir(DOC_ROOT);
+                            dsSpy::$Avatars[$AuthorID] = '.\\files\\temp\\Ava_' . $AuthorID . '.png';
+                            $file = realpath(self::$Avatars[$AuthorID]);
                             imagepng($im, $file);
-                            dsSpy::$Avatars[$AuthorID] = $file;
-                            //alert(strlen($img));
-                            ///file_put_contents('f:/suck.jpg',$img);
                             //dsSpy::$wb_controls[$wid][$id]->picture->clear();
                             if (dsSpy::$LastEventTime !== $LastEventTime) return false;
                             //dsSpy::$wb_controls[$wid][$id]->picture->loadFromStr(dsSpy::ImageToStr($im),'png');
@@ -715,21 +719,21 @@ class dsSpy {
                         $tmc = TMC::NewThread(
                             $url,
                             $EndFunc,
-                            array($wid, self::$LastEventTime, $Text['authorid']),
+                            array($wid, self::$LastEventTime, $AuthorID),
                             $addheads
                         );
                         TMC::Go($tmc);
                     }
-                    if (is_string(self::$Avatars[$Text['authorid']]))
-                        if (is_file(
-                            self::$Avatars[$Text['authorid']]
-                        )) dsSpy::$wb_controls[$wid][$i]->picture->loadFromFile(
-                            self::$Avatars[$Text['authorid']],
-                            'png'
-                        );
-                        else unset(self::$Avatars[$Text['authorid']]);
-                    elseif (self::$Avatars[$Text['authorid']] === true)
-                        self::$WaitingAvatars[$Text['authorid']][] = $i;
+                    if (is_string(self::$Avatars[$AuthorID])) {
+                        $avaPath = realpath(self::$Avatars[$AuthorID]);
+                        if (is_file($avaPath)) {
+                            dsSpy::$wb_controls[$wid][$i]->picture->loadFromFile($avaPath, 'png');
+                        } else {
+                            unset(self::$Avatars[$AuthorID]);
+                        }
+                    } elseif (self::$Avatars[$AuthorID] === true) {
+                        self::$WaitingAvatars[$AuthorID][] = $i;
+                    }
                     self::$wb_controls[$wid][$i]->onMouseDown = $fn_scrollMouseDown;
                     self::$wb_controls[$wid][$i]->onMouseUp = $fn_scrollMouseUp;
                     self::$wb_controls[$wid][$i]->onMouseMove = $fn_scrollMouseMove;
