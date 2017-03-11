@@ -702,7 +702,8 @@ class dsSpy {
                             //wb_play_sound(WBC_INFO);
                             chdir(DOC_ROOT);
                             dsSpy::$Avatars[$AuthorID] = '.\\files\\temp\\Ava_' . $AuthorID . '.png';
-                            $file = realpath(self::$Avatars[$AuthorID]);
+                            $file = DOC_ROOT . '\\files\\temp\\Ava_' . $AuthorID . '.png';
+                            // pre(is_bool($file) ? (int)$file : $file);
                             imagepng($im, $file);
                             //dsSpy::$wb_controls[$wid][$id]->picture->clear();
                             if (dsSpy::$LastEventTime !== $LastEventTime) return false;
